@@ -7,7 +7,6 @@ function [t_out, s_out] = simulation_3d(trajhandle, controlhandle)
 % ***************** QUADROTOR SIMULATION *****************
 
 % *********** YOU SHOULDN'T NEED TO CHANGE ANYTHING BELOW **********
-
 addpath('utils');
 
 % real-time
@@ -59,9 +58,9 @@ disp('Simulation Running....');
 for iter = 1:max_iter
 
     timeint = time:tstep:time+cstep;
-    if timeint(1)>(traj_time-0.05)
-        keyboard
-    end
+%     if timeint(1)>(traj_time-0.05)
+%         keyboard
+%     end
     
     tic;
 
@@ -100,12 +99,12 @@ for iter = 1:max_iter
 %     end
 
     % Pause to make real-time
-    if real_time && (t < cstep)
-        pause(cstep - t);
-    end
+%     if real_time && (t < cstep)
+%         pause(cstep - t);
+%     end
 
     % Check termination criteria
-    if terminate_check(x, time, stop_pos, pos_tol, vel_tol, max_time)
+    if terminate_check(x, time, stop_pos, pos_tol, vel_tol, max_time) && timeint(1)>0.1
         break
     end
 end
