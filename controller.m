@@ -18,6 +18,8 @@ function [F, M] = controller(t, state, des_state, params)
 
 % =================== Your code goes here ===================
 persistent atthist;
+global VarPhiGlobal;
+global eR;
 real_pos_error = [des_state.pos(1) - state.pos(1); des_state.pos(2) - state.pos(2); des_state.pos(3) - state.pos(3)];
 pos_error = real_pos_error;
 % state.acc()都被设置成了0
@@ -27,19 +29,33 @@ pos_error = real_pos_error;
 largeanglecontrol = 1;
 %% For small angle control. traditional control law.
 if largeanglecontrol == 0
-    Kpx = 20;
-Kdx = 8;
-Kpy = 20;
-Kdy = 8;
-Kpz = 30;
-Kdz = 15;
-Kpphi = 600;
-Kdphi = 40;
-Kptheta = 600;
-Kdtheta = 40;
-Kppsi = 200;
-Kdpsi = 30;
-
+    %the following K parameters is for original model
+%     Kpx = 20;
+% Kdx = 8;
+% Kpy = 20;
+% Kdy = 8;
+% Kpz = 30;
+% Kdz = 15;
+% Kpphi = 600;
+% Kdphi = 40;
+% Kptheta = 600;
+% Kdtheta = 40;
+% Kppsi = 200;
+% Kdpsi = 30;% 200 30
+% the following K params is for model in [51] thesis, not work for large
+% attitude control
+Kpx = 16;
+Kdx = 5.6;
+Kpy = 16;
+Kdy = 5.6;
+Kpz = 16;
+Kdz = 5.6;
+Kpphi = 8.81 / params.I(1,1);
+Kdphi =2.54 /  params.I(1,1);
+Kptheta = 8.81 /  params.I(2, 2);
+Kdtheta = 2.54 /  params.I(2,2);
+Kppsi = 8.81/ params.I(3,3);
+Kdpsi = 2.54 /  params.I(3,3);
 r1_c_ddot = des_state.acc(1) + Kdx * (des_state.vel(1) - state.vel(1)) + Kpx * (pos_error(1));
 r2_c_ddot = des_state.acc(2) + Kdy * (des_state.vel(2) - state.vel(2)) + Kpy * (pos_error(2));
 r3_c_ddot = des_state.acc(3) + Kdz * (des_state.vel(3) - state.vel(3)) + Kpz * (pos_error(3));
@@ -67,18 +83,32 @@ M(3) = params.I(3,3) * (Kdpsi * (psicdot - state.omega(3)) + Kppsi * (psic - sta
 
 elseif largeanglecontrol == 1
 %% For large angle control
-Kpx = 20;
-Kdx = 8;
-Kpy = 20;
-Kdy = 8;
-Kpz = 30;
-Kdz = 15;
-Kpphi = 100;
-Kdphi = 20;
-Kptheta = 100;
-Kdtheta = 20;
-Kppsi = 200;
-Kdpsi = 30;
+% original quadrotor model parameters
+% Kpx = 20;
+% Kdx = 8;
+% Kpy = 20;
+% Kdy = 8;
+% Kpz = 30;
+% Kdz = 15;
+% Kpphi = 100;
+% Kdphi = 20;
+% Kptheta = 100;
+% Kdtheta = 20;
+% Kppsi = 40;
+% Kdpsi = 100;
+% params for model in [51] thesis
+Kpx = 16;
+Kdx = 5.6;
+Kpy = 16;
+Kdy = 5.6;
+Kpz = 16;
+Kdz = 5.6;
+Kpphi = 8.81 / params.I(1,1);
+Kdphi =2.54 /  params.I(1,1);
+Kptheta = 8.81 /  params.I(2, 2);
+Kdtheta = 2.54 /  params.I(2,2);
+Kppsi = 8.81/ params.I(3,3);
+Kdpsi = 2.54 /  params.I(3,3);
 
 r1_c_ddot = des_state.acc(1) + Kdx * (des_state.vel(1) - state.vel(1)) + Kpx * (pos_error(1));
 r2_c_ddot = des_state.acc(2) + Kdy * (des_state.vel(2) - state.vel(2)) + Kpy * (pos_error(2));
@@ -117,7 +147,8 @@ F_des_z_B = F_des_x_W * (cos(state.rot(3)) * sin(state.rot(2)) + cos(state.rot(2
 
 u1_des = F_des_z_B;
 
-z_B_des_W = [F_des_x_B; F_des_y_B; F_des_z_B] / norm([F_des_x_B; F_des_y_B; F_des_z_B]);
+% z_B_des_W = [F_des_x_B; F_des_y_B; F_des_z_B] / norm([F_des_x_B; F_des_y_B; F_des_z_B]);
+z_B_des_W = [F_des_x_W; F_des_y_W; F_des_z_W] / norm([F_des_x_W; F_des_y_W; F_des_z_W]);
 
 X_C_des_W = [cos(des_state.yaw); sin(des_state.yaw); 0];
 temp = cross(z_B_des_W, X_C_des_W);
@@ -130,8 +161,9 @@ R_des = [x_B_des_W y_B_des_W z_B_des_W];
 %%%%% some problem with this part %%%%%
 % phic and thetac is not right, sometimes.
 phic = asin(-R_des(3, 2));
-thetac = atan(R_des(3,1) / R_des(3,3));
+thetac = atan(-R_des(3,1) / R_des(3,3));
 psic = atan(-R_des(1,2) / R_des(2,2));
+
 %%%%% some problem with this part %%%%%
 atthist = [atthist [t; phic; thetac; psic; state.rot(1);  state.rot(2); state.rot(3)]];
 
@@ -139,7 +171,9 @@ atthist = [atthist [t; phic; thetac; psic; state.rot(1);  state.rot(2); state.ro
 % it turns a skew-symmetric matrix to a vector
 % https://github.com/justinthomas/MATLAB-tools/blob/master/vee.m
 e_R = 0.5 * vee((R_des' * R - R' * R_des)); 
-
+VarPhi = 0.5 * trace(diag([1 1 1]) - R_des' * R);
+VarPhiGlobal = [VarPhiGlobal; VarPhi];
+eR = [eR; e_R(1)];
 e_w = [phicdot - state.omega(1); thetacdot - state.omega(2); (psicdot - state.omega(3))];
 
 %%%%% Not completed Start%%%%%
@@ -152,7 +186,7 @@ real_kW = diag([Kdphi * params.I(1,1); Kdtheta * params.I(2,2); Kdpsi * params.I
 if max(abs(e_R)) < 1e-3 && max(abs(e_w)) < 1e-3
     u2_des = [0;0;0];
 else
-    u2_des =  -real_kR * e_R + real_kW * e_w;
+    u2_des =  -real_kR * e_R + real_kW * e_w; 
 end
 
 % Thrust
