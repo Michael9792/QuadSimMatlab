@@ -66,7 +66,7 @@ global traj_time
 if nargin > 2
     d = waypoints(:,2:end) - waypoints(:,1:end-1);
     d0 = 2 * sqrt(d(1,:).^2 + d(2,:).^2 + d(3,:).^2);
-    traj_time = [0, cumsum(d0)/3];
+    traj_time = [0, cumsum(d0)];
     waypoints0 = waypoints;
     %    we should solve for x, y, z independently, we really need coefficients alpha_ij^x, alpha_ij^y, alpha_ij^z and they will be different.
     %    https://www.coursera.org/learn/robotics-flight/discussions/weeks/4/threads/7Ug8_GpJEeasOQpiYXGJHw
@@ -276,7 +276,7 @@ else
     %     desired_state.pos = (desired_state.pos)';
     %     desired_state.vel = zeros(3,1);
     %     desired_state.acc = zeros(3,1);
-   desired_state.yaw = 0;%  sin (t_real);
+   desired_state.yaw = 0; %t_real/20; % 0;1.57; sin(t_real)
     desired_state.yawdot = 0;% cos(t_real);
 end
 % desired_state.pos = zeros(3,1);
