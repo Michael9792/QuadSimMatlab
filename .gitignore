@@ -2,3 +2,4 @@ ReadytoRemove.m
 *.log
 *.asv
 **/*.asv
+\html\
