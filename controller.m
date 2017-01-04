@@ -51,7 +51,7 @@ Kdy = 5.6;
 Kpz = 16;
 Kdz = 5.6;
 Kpphi = 8.81 / params.I(1,1);
-Kdphi =2.54 /  params.I(1,1);
+Kdphi = 2.54 /  params.I(1,1);
 Kptheta = 8.81 /  params.I(2, 2);
 Kdtheta = 2.54 /  params.I(2,2);
 Kppsi = 8.81/ params.I(3,3);
@@ -83,7 +83,8 @@ M(3) = params.I(3,3) * (Kdpsi * (psicdot - state.omega(3)) + Kppsi * (psic - sta
 
 elseif largeanglecontrol == 1
 %% For large angle control
-% original quadrotor model parameters
+
+%% original quadrotor model parameters
 % Kpx = 20;
 % Kdx = 8;
 % Kpy = 20;
@@ -96,19 +97,39 @@ elseif largeanglecontrol == 1
 % Kdtheta = 20;
 % Kppsi = 40;
 % Kdpsi = 100;
-% params for model in [51] thesis
+
+%% params for model in [51] thesis
 Kpx = 16;
 Kdx = 5.6;
 Kpy = 16;
 Kdy = 5.6;
 Kpz = 16;
 Kdz = 5.6;
-Kpphi = 8.81 / params.I(1,1);
-Kdphi =2.54 /  params.I(1,1);
-Kptheta = 8.81 /  params.I(2, 2);
-Kdtheta = 2.54 /  params.I(2,2);
+
+%% stiff attitude control parameter(almost flipped attitude(165 \degree), stable to fixed point)
+% if oscilation is large, just decrease Kd. Strange.
+Kpphi = 60 / params.I(1,1);
+Kdphi = 6 /  params.I(1,1);
+Kptheta = 60 /  params.I(2, 2);
+Kdtheta = 6 /  params.I(2,2);
 Kppsi = 8.81/ params.I(3,3);
 Kdpsi = 2.54 /  params.I(3,3);
+
+%% soft attitude control parameter(3D trajectory tracking)
+% Kpphi = 30 / params.I(1,1);
+% Kdphi = 2.54 /  params.I(1,1);
+% Kptheta = 30 /  params.I(2, 2);
+% Kdtheta = 2.54 /  params.I(2,2);
+% Kppsi = 8.81/ params.I(3,3);
+% Kdpsi = 2.54 /  params.I(3,3);
+
+%% bad attitude control parameter(stated in [51])
+% Kpphi = 8.81 / params.I(1,1);
+% Kdphi = 2.54 /  params.I(1,1);
+% Kptheta = 8.81 /  params.I(2, 2);
+% Kdtheta = 2.54 /  params.I(2,2);
+% Kppsi = 8.81/ params.I(3,3);
+% Kdpsi = 2.54 /  params.I(3,3);
 
 r1_c_ddot = des_state.acc(1) + Kdx * (des_state.vel(1) - state.vel(1)) + Kpx * (pos_error(1));
 r2_c_ddot = des_state.acc(2) + Kdy * (des_state.vel(2) - state.vel(2)) + Kpy * (pos_error(2));
@@ -121,21 +142,9 @@ phicdot = (r1_c_ddot * cos(des_state.yaw) * des_state.yawdot + r2_c_ddot * sin(d
 thetacdot = (-r1_c_ddot * sin(des_state.yaw) * des_state.yawdot + r2_c_ddot * cos(des_state.yaw) * des_state.yawdot + r1_c_d3dot * cos(des_state.yaw) + r2_c_d3dot * sin(des_state.yaw))/ params.gravity;
 psicdot = des_state.yawdot;
 
-% phic = 0;
-% thetac = 0;
-% psic = 0;
-
-% phicdot = 0;
-% thetacdot = 0;
-% psicdot = 0;
-
 F_des_x_W = params.mass * r1_c_ddot;
 F_des_y_W= params.mass * r2_c_ddot;
 F_des_z_W = params.mass * (r3_c_ddot + params.gravity);
-
-% F_des_x_W = 0;
-% F_des_y_W = 0;
-% F_des_z_W =  params.mass *  params.gravity;
 
 R = [(cos(state.rot(2)) * cos(state.rot(3)) - sin(state.rot(1)) * sin(state.rot(3)) * sin(state.rot(2))) -(cos(state.rot(1)) * sin(state.rot(3))) (cos(state.rot(3)) * sin(state.rot(2)) + cos(state.rot(2)) * sin(state.rot(1)) * sin(state.rot(3)));...
 (cos(state.rot(2)) * sin(state.rot(3)) + cos(state.rot(3)) * sin(state.rot(1)) * sin(state.rot(2))) cos(state.rot(1)) * cos(state.rot(3)) (sin(state.rot(3)) * sin(state.rot(2)) - cos(state.rot(3)) * cos(state.rot(2)) * sin(state.rot(1)));...
@@ -169,7 +178,9 @@ atthist = [atthist [t; phic; thetac; psic; state.rot(1);  state.rot(2); state.ro
 
 % e_R is vee map which takes elements of so(3) to R3. 
 % it turns a skew-symmetric matrix to a vector
-% https://github.com/justinthomas/MATLAB-tools/blob/master/vee.m
+% 
+%%
+% <https://github.com/justinthomas/MATLAB-tools/blob/master/vee.m>
 e_R = 0.5 * vee((R_des' * R - R' * R_des)); 
 VarPhi = 0.5 * trace(diag([1 1 1]) - R_des' * R);
 VarPhiGlobal = [VarPhiGlobal; VarPhi];

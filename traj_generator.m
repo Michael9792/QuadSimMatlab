@@ -66,7 +66,7 @@ global traj_time
 if nargin > 2
     d = waypoints(:,2:end) - waypoints(:,1:end-1);
     d0 = 2 * sqrt(d(1,:).^2 + d(2,:).^2 + d(3,:).^2);
-    traj_time = [0, cumsum(d0)];
+    traj_time = [0, cumsum(d0)/5];
     waypoints0 = waypoints;
     %    we should solve for x, y, z independently, we really need coefficients alpha_ij^x, alpha_ij^y, alpha_ij^z and they will be different.
     %    https://www.coursera.org/learn/robotics-flight/discussions/weeks/4/threads/7Ug8_GpJEeasOQpiYXGJHw
