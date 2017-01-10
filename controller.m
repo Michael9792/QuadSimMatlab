@@ -170,8 +170,8 @@ R_des = [x_B_des_W y_B_des_W z_B_des_W];
 %%%%% some problem with this part %%%%%
 % phic and thetac is not right, sometimes.
 phic = asin(-R_des(3, 2));
-thetac = atan(-R_des(3,1) / R_des(3,3));
-psic = atan(-R_des(1,2) / R_des(2,2));
+thetac = atan2(-R_des(3,1) , R_des(3,3));
+psic = atan2(-R_des(1,2), R_des(2,2));
 
 %%%%% some problem with this part %%%%%
 atthist = [atthist [t; phic; thetac; psic; state.rot(1);  state.rot(2); state.rot(3)]];
