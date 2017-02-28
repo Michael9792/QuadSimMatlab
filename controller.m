@@ -17,9 +17,11 @@ function [F, M] = controller(t, state, des_state, params)
 
 
 % =================== Your code goes here ===================
-persistent atthist;
-global VarPhiGlobal;
-global eR;
+% persistent atthist;
+% global VarPhiGlobal;
+% global eR;
+global ForceSave;
+global MomentSave;
 real_pos_error = [des_state.pos(1) - state.pos(1); des_state.pos(2) - state.pos(2); des_state.pos(3) - state.pos(3)];
 pos_error = real_pos_error;
 % state.acc()都被设置成了0
@@ -174,7 +176,7 @@ thetac = atan2(-R_des(3,1) , R_des(3,3));
 psic = atan2(-R_des(1,2), R_des(2,2));
 
 %%%%% some problem with this part %%%%%
-atthist = [atthist [t; phic; thetac; psic; state.rot(1);  state.rot(2); state.rot(3)]];
+% atthist = [atthist [t; phic; thetac; psic; state.rot(1);  state.rot(2); state.rot(3)]];
 
 % e_R is vee map which takes elements of so(3) to R3. 
 % it turns a skew-symmetric matrix to a vector
@@ -183,8 +185,8 @@ atthist = [atthist [t; phic; thetac; psic; state.rot(1);  state.rot(2); state.ro
 % <https://github.com/justinthomas/MATLAB-tools/blob/master/vee.m>
 e_R = 0.5 * vee((R_des' * R - R' * R_des)); 
 VarPhi = 0.5 * trace(diag([1 1 1]) - R_des' * R);
-VarPhiGlobal = [VarPhiGlobal; VarPhi];
-eR = [eR; e_R(1)];
+% VarPhiGlobal = [VarPhiGlobal; VarPhi];
+% eR = [eR; e_R(1)];
 e_w = [phicdot - state.omega(1); thetacdot - state.omega(2); (psicdot - state.omega(3))];
 
 %%%%% Not completed Start%%%%%
@@ -202,9 +204,10 @@ end
 
 % Thrust
 F = u1_des;
-
+ForceSave = [ForceSave; F];
 % Moment
 M = u2_des;
+MomentSave = [MomentSave; M(1)];
 % =================== Your code ends here ===================
 end
 end

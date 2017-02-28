@@ -1,7 +1,8 @@
 close all;
 % clear all;
 clearvars -global VarPhiGlobal eR;
-global VarPhiGlobal eR;
+% global VarPhiGlobal eR;
+global MomentSave ForceSave Sum;
 addpath('utils');
 
 %% pre-calculated trajectories
@@ -29,10 +30,18 @@ controlhandle = @controller;
 [t, state] = simulation_3d(trajhandle, controlhandle);
 
 %% Post Evaluation
-figure();
-plot(1:size(VarPhiGlobal, 1), VarPhiGlobal, 'b', 'linewidth', 1.5);
-ylabel('\Phi');
+% figure();
+% plot(1:size(VarPhiGlobal, 1), VarPhiGlobal, 'b', 'linewidth', 1.5);
+% ylabel('\Phi');
+% 
+% figure();
+% plot(1:size(eR, 1), eR, 'b', 'linewidth', 1.5);
+% ylabel('e_R');
 
 figure();
-plot(1:size(eR, 1), eR, 'b', 'linewidth', 1.5);
-ylabel('e_R');
+plot(1:size(MomentSave, 1), MomentSave./ForceSave, 'b', 'linewidth', 1.5);
+ylabel('$\frac{\bar{u}_2}{\bar{u}_1}$', 'interpreter','latex', 'FontSize', 20);
+
+figure();
+plot(1:size(Sum, 1), Sum./9.81, 'b', 'linewidth', 1.5);
+ylabel('estimated mass', 'FontSize', 20);

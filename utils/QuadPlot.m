@@ -141,7 +141,7 @@ classdef QuadPlot < handle
                 'XData', Q.state_des_hist(1,1:Q.k), ...
                 'YData', Q.state_des_hist(2,1:Q.k), ...
                 'ZData', Q.state_des_hist(3,1:Q.k));
-            drawnow;
+%             drawnow;
         end
     end
 
