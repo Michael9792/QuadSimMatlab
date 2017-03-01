@@ -33,7 +33,7 @@ set(gcf,'Renderer','OpenGL')
 %% *********************** INITIAL CONDITIONS ***********************
 disp('Setting initial conditions...');
 tstep    = 0.01; % this determines the time step at which the solution is given
-cstep    = 0.05; % image capture time interval
+cstep    = 0.02; % image capture time interval
 max_iter = max_time/cstep; % max iteration
 nstep    = cstep/tstep;
 time     = 0; % current time
@@ -52,6 +52,10 @@ x       = x0;        % state
 pos_tol = 0.01;
 vel_tol = 0.01;
 global traj_time
+%% *****************************VIDEO***********************************
+video_writer = VideoWriter('test.avi', 'Uncompressed AVI');
+open(video_writer);
+
 %% ************************* RUN SIMULATION *************************
 disp('Simulation Running....');
 % Main loop
@@ -107,9 +111,13 @@ for iter = 1:max_iter
     if terminate_check(x, time, stop_pos, pos_tol, vel_tol, max_time) && timeint(1)>0.1
         break
     end
+    writeVideo(video_writer, getframe(h_fig));
+
 end
 
 %% ************************* POST PROCESSING *************************
+% close video recording 
+close(video_writer);
 % Truncate xtraj and ttraj
 xtraj = xtraj(1:iter*nstep,:);
 ttraj = ttraj(1:iter*nstep);
