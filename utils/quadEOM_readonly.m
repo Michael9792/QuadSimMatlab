@@ -14,7 +14,7 @@ function sdot = quadEOM_readonly(t, s, F, M, params)
 %
 % NOTE: You should not modify this function
 % See Also: quadEOM_readonly, nanoplus
-global Sum;
+global Sum dot2;
 %************ EQUATIONS OF MOTION ************************
 % Limit the force and moments due to actuator limits
 A = [0.25,                      0, -0.5/params.arm_length;
@@ -52,12 +52,14 @@ wRb = bRw';
 
 % Angular acceleration
 omega = [p;q;r];
-pqrdot   = params.invI * (M - cross(omega, params.I*omega)-cross([0;0.10;0], [0; 0; F]));
+pqrdot   = params.invI * (M - cross(omega, params.I*omega)-cross([0;0.05;0], [0; 0; F]));
 
 % Acceleration
-accel = 1 / params.mass * (wRb * [0; 0; F] - [0; 0; params.mass * params.gravity] - cross(omega, cross(omega, [0; 0.10; 0])));
+accel = 1 / params.mass * (wRb * [0; 0; F] - [0; 0; params.mass * params.gravity] - cross(omega, cross(omega, [0; 0.05; 0])));
 
 Sum = [Sum; F*((wRb * [0;0;1])' * [0;0;1])];
+dot2 = [dot2; accel'];
+
 % Angular velocity
 K_quat = 2; %this enforces the magnitude 1 constraint for the quaternion
 quaterror = 1 - (qW^2 + qX^2 + qY^2 + qZ^2);

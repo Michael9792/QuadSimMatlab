@@ -1,14 +1,15 @@
 close all;
 % clear all;
-clearvars -global VarPhiGlobal eR;
+clearvars -global VarPhiGlobal eR MomentSave ForceSave Sum dot2;
 % global VarPhiGlobal eR;
-global MomentSave ForceSave Sum;
+global MomentSave ForceSave Sum dot2;
 addpath('utils');
 
 %% pre-calculated trajectories
 % trajhandle = @traj_line;
 % trajhandle = @traj_helix;
-trajhandle = @traj_fixedpoint;
+% trajhandle = @traj_fixedpoint;
+trajhandle = @traj_exciting;
 
 %% Trajectory generation with waypoints
 %% You need to implement this
@@ -43,5 +44,5 @@ plot(1:size(MomentSave, 1), MomentSave./ForceSave, 'b', 'linewidth', 1.5);
 ylabel('$\frac{\bar{u}_2}{\bar{u}_1}$', 'interpreter','latex', 'FontSize', 20);
 
 figure();
-plot(1:size(Sum, 1), Sum./9.81, 'b', 'linewidth', 1.5);
+plot(1:size(Sum, 1), Sum./(dot2(3)+9.81), 'b', 'linewidth', 1.5);
 ylabel('estimated mass', 'FontSize', 20);
