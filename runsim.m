@@ -43,6 +43,14 @@ figure();
 plot(1:size(MomentSave, 1), MomentSave./ForceSave, 'b', 'linewidth', 1.5);
 ylabel('$\frac{\bar{u}_2}{\bar{u}_1}$', 'interpreter','latex', 'FontSize', 20);
 
+gravity = 9.81;
+output1 = dot2(:, 3) + gravity;
+output2 = dot2(:, 2) - dot2(:, 3) - gravity;
+output3 = dot2(:, 1) - dot2(:, 3) - gravity;
+[start_index, inv_mass]= RecursiveLeastSquareAnalysis(output1, Sum);
+% [start_index, inv_mass]= RecursiveLeastSquareAnalysis(9.81, dot2, output1);
 figure();
-plot(1:size(Sum, 1), Sum./(dot2(3)+9.81), 'b', 'linewidth', 1.5);
-ylabel('estimated mass', 'FontSize', 20);
+plot(1:size(Sum, 1), Sum./(dot2(3)+9.81), 'r', (start_index -1):(start_index +size(inv_mass, 1)) - 2, 1./inv_mass,  'b', 'linewidth', 1.5);
+title('Comparison between direct calculation and RLS');
+ylabel('estimated mass');
+legend('Directly from Newton Formula', 'Recursive Least Square under Disturbance');
