@@ -1,15 +1,15 @@
 close all;
 % clear all;
-clearvars -global VarPhiGlobal eR MomentSave ForceSave Sum dot2;
+clearvars -global VarPhiGlobal eR MomentSave ForceSave lift_force dot2;
 % global VarPhiGlobal eR;
-global MomentSave ForceSave Sum dot2;
+global MomentSave ForceSave lift_force dot2;
 addpath('utils');
 
 %% pre-calculated trajectories
 % trajhandle = @traj_line;
-% trajhandle = @traj_helix;
+trajhandle = @traj_helix;
 % trajhandle = @traj_fixedpoint;
-trajhandle = @traj_exciting;
+% trajhandle = @traj_exciting;
 
 %% Trajectory generation with waypoints
 %% You need to implement this
@@ -44,13 +44,28 @@ plot(1:size(MomentSave, 1), MomentSave./ForceSave, 'b', 'linewidth', 1.5);
 ylabel('$\frac{\bar{u}_2}{\bar{u}_1}$', 'interpreter','latex', 'FontSize', 20);
 
 gravity = 9.81;
-output1 = dot2(:, 3) + gravity;
-output2 = dot2(:, 2) - dot2(:, 3) - gravity;
-output3 = dot2(:, 1) - dot2(:, 3) - gravity;
-[start_index, inv_mass]= RecursiveLeastSquareAnalysis(output1, Sum);
-% [start_index, inv_mass]= RecursiveLeastSquareAnalysis(9.81, dot2, output1);
+output1 = dot2(:, 4) + gravity;
+
+Phi_mass = lift_force(:, 4);
+[start_index, inv_mass]= RecursiveLeastSquareAnalysis(output1, Phi_mass);
 figure();
-plot(1:size(Sum, 1), Sum./(dot2(3)+9.81), 'r', (start_index -1):(start_index +size(inv_mass, 1)) - 2, 1./inv_mass,  'b', 'linewidth', 1.5);
+plot(lift_force(:, 1), lift_force(:, 4)./(dot2(:, 4)+9.81), 'r', lift_force((start_index -1):(start_index +size(inv_mass, 1) - 2), 1), 1./inv_mass,  'b', 'linewidth', 1.5);
 title('Comparison between direct calculation and RLS');
 ylabel('estimated mass');
 legend('Directly from Newton Formula', 'Recursive Least Square under Disturbance');
+
+% output2 = 4.34 * dot2(:, 1) - lift_force(:, 1);
+% Phi_Fx = ones(size(lift_force, 1), 1);
+% [start_index, Fx]= RecursiveLeastSquareAnalysis(output2, Phi_Fx);
+% figure();
+% plot((start_index -1):(start_index +size(Fx, 1) - 2), Fx,  'b', 'linewidth', 1.5);
+% title('Disturbance Force in X direction');
+% ylabel('estimated Force');
+% 
+% output3 = 4.34 * dot2(:, 2) - lift_force(:, 2);
+% Phi_Fy = ones(size(lift_force, 1), 1);
+% [start_index, Fy]= RecursiveLeastSquareAnalysis(output3, Phi_Fy);
+% figure();
+% plot((start_index -1):(start_index +size(Fy, 1) - 2), Fy,  'b', 'linewidth', 1.5);
+% title('Disturbance Force in Y direction');
+% ylabel('estimated Force');

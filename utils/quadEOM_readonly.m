@@ -14,13 +14,16 @@ function sdot = quadEOM_readonly(t, s, F, M, params)
 %
 % NOTE: You should not modify this function
 % See Also: quadEOM_readonly, nanoplus
-global Sum dot2;
+global lift_force dot2;
 %************ EQUATIONS OF MOTION ************************
 % Limit the force and moments due to actuator limits
 A = [0.25,                      0, -0.5/params.arm_length;
      0.25,  0.5/params.arm_length,                      0;
      0.25,                      0,  0.5/params.arm_length;
      0.25, -0.5/params.arm_length,                      0];
+if mod(t, 2)>1
+    params.mass = params.mass + 0.5;
+end
 
 prop_thrusts = A*[F;M(1:2)]; % Not using moment about Z-axis for limits
 prop_thrusts_clamped = max(min(prop_thrusts, params.maxF/4), params.minF/4);
@@ -52,13 +55,13 @@ wRb = bRw';
 
 % Angular acceleration
 omega = [p;q;r];
-pqrdot   = params.invI * (M - cross(omega, params.I*omega)-cross([0;0.05;0], [0; 0; F]));
+pqrdot   = params.invI * (M - cross(omega, params.I*omega)-cross([0;0.0;0], [0; 0; F]));
 
 % Acceleration
-accel = 1 / params.mass * (wRb * [0; 0; F] - [0; 0; params.mass * params.gravity] - cross(omega, cross(omega, [0; 0.05; 0])));
+accel = 1 / params.mass * (wRb * [0; 0; F] - [0; 0; params.mass * params.gravity] - cross(omega, cross(omega, [0; 0.0; 0])));
 
-Sum = [Sum; F*((wRb * [0;0;1])' * [0;0;1])];
-dot2 = [dot2; accel'];
+lift_force = [lift_force; [t F*((wRb * [0;0;1])' * eye(3))]];
+dot2 = [dot2; [t accel']];
 
 % Angular velocity
 K_quat = 2; %this enforces the magnitude 1 constraint for the quaternion
