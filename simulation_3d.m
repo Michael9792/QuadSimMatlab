@@ -53,7 +53,7 @@ pos_tol = 0.01;
 vel_tol = 0.01;
 global traj_time
 %% *****************************VIDEO***********************************
-video_writer = VideoWriter('test.avi', 'Uncompressed AVI');
+video_writer = VideoWriter('vx2_r-30_pitch-30.avi', 'Uncompressed AVI');
 open(video_writer);
 
 %% ************************* RUN SIMULATION *************************
@@ -75,6 +75,7 @@ for iter = 1:max_iter
         desired_state = trajhandle(time, current_state);
         QP.UpdateQuadPlot(x, [desired_state.pos; desired_state.vel], time);
         h_title = title(sprintf('iteration: %d, time: %4.2f', iter, time));
+        writeVideo(video_writer, getframe(h_fig));
     end
 
     % Run simulation

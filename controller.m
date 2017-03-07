@@ -20,6 +20,7 @@ function [F, M] = controller(t, state, des_state, params)
 persistent atthist;
 global VarPhiGlobal;
 global eR;
+global Moment
 real_pos_error = [des_state.pos(1) - state.pos(1); des_state.pos(2) - state.pos(2); des_state.pos(3) - state.pos(3)];
 pos_error = real_pos_error;
 % state.acc()都被设置成了0
@@ -205,6 +206,16 @@ F = u1_des;
 
 % Moment
 M = u2_des;
+
+% After several seconds, the quad receives control signal and start to
+% stablize. This is just for plotting, no actual improvements to control
+% algorithms. 
+if t<0.2
+    F = 0;
+    M = zeros(3,1);
+    
+end
+Moment = [Moment [ t; F; M]];
 % =================== Your code ends here ===================
 end
 end

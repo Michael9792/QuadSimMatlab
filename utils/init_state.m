@@ -2,7 +2,7 @@ function [ s ] = init_state( start, yaw )
 %INIT_STATE Initialize 13 x 1 state vector
 
 s     = zeros(13,1);
-phi0   = -5*pi/180;%0%pi*4/9
+phi0   = -70*pi/180;%0%pi*4/9
 theta0 = 0;%0%pi*4/9
 psi0   = yaw;
 Rot0   = RPYtoRot_ZXY(phi0, theta0, psi0);
@@ -10,9 +10,9 @@ Quat0  = RotToQuat(Rot0);
 s(1)  = start(1); %x
 s(2)  = start(2); %y
 s(3)  = start(3); %z
-s(4)  = 2;        %xdot
+s(4)  = 0;        %xdot
 s(5)  = 0;        %ydot
-s(6)  = 0;        %zdot
+s(6)  = 2;        %zdot
 s(7)  = Quat0(1); %qw
 s(8)  = Quat0(2); %qx
 s(9)  = Quat0(3); %qy

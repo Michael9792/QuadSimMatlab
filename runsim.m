@@ -1,7 +1,7 @@
 close all;
 % clear all;
-clearvars -global VarPhiGlobal eR;
-global VarPhiGlobal eR;
+clearvars -global VarPhiGlobal eR Moment;
+global VarPhiGlobal eR Moment;
 addpath('utils');
 
 %% pre-calculated trajectories
@@ -36,3 +36,11 @@ ylabel('\Phi');
 figure();
 plot(1:size(eR, 1), eR, 'b', 'linewidth', 1.5);
 ylabel('e_R');
+
+figure();
+plot(Moment(1, :), Moment(5, :), 'b', 'linewidth', 1.5);
+ylabel('Moment_z');
+
+figure();
+plot(Moment(1, :), Moment(2, :), 'b', 'linewidth', 1.5);
+ylabel('Force');
