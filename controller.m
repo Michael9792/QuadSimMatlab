@@ -207,7 +207,7 @@ F = u1_des;
 ForceSave = [ForceSave; F];
 % Moment
 M = u2_des;
-MomentSave = [MomentSave; M(1)];
+MomentSave = [MomentSave; M'];
 % =================== Your code ends here ===================
 end
 end

@@ -59,13 +59,13 @@ function [ desired_state ] = traj_exciting(t_real, state)
 
 
 %% Fill in your code here
-desired_state.pos(1,1) = 2*sin(2*t_real);
+desired_state.pos(1,1) = 2*sin(t_real);
 desired_state.pos(2,1) = -3*cos(t_real);
 desired_state.pos(3,1) = 0;
-desired_state.vel(1,1) = 4*cos(2*t_real);
+desired_state.vel(1,1) = 2*cos(t_real);
 desired_state.vel(2,1) = 3*sin(t_real);
 desired_state.vel(3,1) = 0;
-desired_state.acc(1,1) = -8 *sin(2*t_real);
+desired_state.acc(1,1) = -2 *sin(t_real);
 desired_state.acc(2,1) = 3*cos(t_real);
 desired_state.acc(3,1) = 0;
 desired_state.yaw = 0; %t_real/20; % 0;1.57; sin(t_real)
