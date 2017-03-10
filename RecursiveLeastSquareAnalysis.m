@@ -25,10 +25,6 @@ for i = 1:step:(totalSize - 5*initial_value_step)
     error = y - Phi * theta(j, :)';
 %     disp(theta(i, :));
     theta(j+1, :) = (theta(j, :)' + K' * error)';
-    if theta(j+1, 1) > 1e3
-        disp('estimated number is too large!');
-        return;
-    end
     time_stamp(j+1) = time(5*initial_value_step+i);
     P = (eye(size(K, 1)) - K * Phi') * P ./ lambda;
     P = 0.5 * (P + P');
