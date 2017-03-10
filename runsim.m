@@ -9,17 +9,17 @@ addpath('utils');
 % trajhandle = @traj_line;
 % trajhandle = @traj_helix;
 % trajhandle = @traj_fixedpoint;
-% trajhandle = @traj_exciting;
+trajhandle = @traj_exciting;
 
 %% Trajectory generation with waypoints
 %% You need to implement this
-trajhandle = @traj_generator;
-waypoints = [0   0   0;
-             5    0   0;
-             0   0   0;
-             5   2   0;
-             -1   3   0]';
-trajhandle([],[],waypoints);
+% trajhandle = @traj_generator;
+% waypoints = [0   0   0;
+%              5    0   0;
+%              0   0   0;
+%              5   2   0;
+%              -1   3   0]';
+% trajhandle([],[],waypoints);
 
 
 %% controller
@@ -39,10 +39,11 @@ controlhandle = @controller;
 % plot(1:size(eR, 1), eR, 'b', 'linewidth', 1.5);
 % ylabel('e_R');
 
-figure();
-plot(1:size(MomentSave, 1), MomentSave(:, 1)./ForceSave, 'b', 'linewidth', 1.5);
-ylabel('$\frac{\bar{u}_2}{\bar{u}_1}$', 'interpreter','latex', 'FontSize', 20);
+% BLS method
+disp(sum(MomentSave(:, 1))/sum(ForceSave));
+disp(sum(lift_force(:, 4)) / size(lift_force, 1) / 9.81);
 
+% RLS method
 gravity = 9.81;
 output1 = dot2(:, 4) + gravity;
 Time = lift_force(:, 1);
@@ -75,11 +76,14 @@ Phi_u1 = ForceSave;
 Time = lift_force(:, 1);
 [start_index, theta, time_stamp]= RecursiveLeastSquareAnalysis(Time, qdot_save, [Phi_u3 Phi_u1]);
 Iyy = 1./theta(:, 1);
-xoff = theta(:, 2) .* theta(:, 1);
 inv_Iyy_multiply_xoff=theta(:, 2);
+
 % fault detection
 indice = abs(Iyy)>10;
 Iyy(indice) = 0;
+
+xoff = inv_Iyy_multiply_xoff .* Iyy;
+% fault detection
 indice = abs(xoff)>10;
 xoff(indice) = 0;
 
@@ -87,6 +91,7 @@ figure();
 plot(time_stamp, Iyy, 'b', 'linewidth', 1.5);
 title('I_{yy}');
 ylabel('estimated inertia');
+disp(std(Iyy));
 
 figure();
 plot(time_stamp, xoff, 'b', 'linewidth', 1.5);

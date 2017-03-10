@@ -55,10 +55,10 @@ wRb = bRw';
 
 % Angular acceleration
 omega = [p;q;r];
-pqrdot   = params.invI * (M - cross(omega, params.I*omega)-cross([0;0.05;0], [0; 0; F]));
+pqrdot   = params.invI * (M - cross(omega, params.I*omega)-cross([0.05; 0;0], [0; 0; F]));
 
 % Acceleration
-accel = 1 / params.mass * (wRb * [0; 0; F] - [0; 0; params.mass * params.gravity] - cross(omega, cross(omega, [0; 0.05; 0])));
+accel = 1 / params.mass * (wRb * [0; 0; F] - [0; 0; params.mass * params.gravity] - cross(omega, cross(omega, [0.05; 0; 0])));
 
 lift_force = [lift_force; [t F*((wRb * [0;0;1])' * eye(3))]];
 dot2 = [dot2; [t accel']];
