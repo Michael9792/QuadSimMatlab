@@ -9,5 +9,5 @@ Estimated value of x_{off} and mass is pretty exact.
 ## RLS
 Mass should change regularly. Quad in an exciting trajectory. Approx number is displayed in a figure.
 Estimated value of mass is pretty exact, can show trend of changing mass.
-![RLS mass estimation](RLS mass.png)
+![RLS mass estimation](rlsMass.png)
 Estimated value of inertia Iyy and offset x_{off} is bad. 
