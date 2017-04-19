@@ -1,37 +1,10 @@
-## Welcome to GitHub Pages
+这是一个自己用`matlab`实现的四旋翼仿真框架（或称为轨迹生成器），里面有调整好的控制器和轨迹生成部分代码。利用这个基本的四旋翼仿真框架可以方便的验证一些算法。
+利用该框架，可以根据需要，方便的生成任意形式的轨迹，并通过控制器的代码控制四旋翼跟踪预定的轨迹，获取较为真实的飞行数据。
 
-You can use the [editor on GitHub](https://github.com/Michael9792/QuadSimMatlab/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+这个仿真器的代码来自于Coursera上宾夕法尼亚大学的Robotics系列公开课程: Robotics: Aerial Robotics中第四周的作业提供的源代码。
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+第四周作业所提供的源代码包括了动力学积分部分（这个框架中使用的是四元数而不是欧拉角），以及每个时间周期仿真大循环的框架，以及画图等处理数据所用的代码。
+我完成的工作，是把生成轨迹的代码写好，以及控制器调好。
 
-### Markdown
+现在，利用这个仿真框架，可以验证一些论文中看到的算法。详见除master分支以外的分支。 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Michael9792/QuadSimMatlab/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
