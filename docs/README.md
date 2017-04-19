@@ -6,4 +6,5 @@ A stable controller will be created, and several trajectory tracking algorithms 
 Functions available now:
 :   Basic control to quadrotor. Without to much excitement, it will work. 
 :   Track several trajectories: fixed point, helix, line, self-defined trajectory based on five fixed points. 
-:  To be continued.
+:   Aerobatic flight simulation by quadrotor.
+:   Estimate some parameters during hovering conditions and other parameters while flying under disturbances.
