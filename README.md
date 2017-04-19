@@ -5,7 +5,7 @@
 使用Geometric Tracking Control of a Quadrotor UAV on SE(3)这篇论文。
 强非线性的情况对于四旋翼飞机的控制可以不采用增益序列的方法, 使用该文章中提供的方法能够完成四旋翼的稳定控制. 
 
-##仿真视频:
+## 仿真视频:
 https://www.youtube.com/watch?v=NZKBbnfau8s
 
 # Aerobatic Flight of a quadrotor
