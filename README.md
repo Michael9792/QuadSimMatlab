@@ -6,12 +6,13 @@
 强非线性的情况对于四旋翼飞机的控制可以不采用增益序列的方法, 使用该文章中提供的方法能够完成四旋翼的稳定控制. 
 
 ## 仿真视频:
-分集版本(4种初始条件下的仿真结果)：
-http://www.iqiyi.com/w_19ru47sxnx.html
-http://www.iqiyi.com/w_19ru47tr3h.html
-http://www.iqiyi.com/w_19ru47x8k1.html
-http://www.iqiyi.com/w_19ru47xo61.html
-合集版本（带算法说明的详细版本不过不太清晰）
+### 分集版本(4种初始条件下的仿真结果)：
+1. http://www.iqiyi.com/w_19ru47sxnx.html
+2. http://www.iqiyi.com/w_19ru47tr3h.html
+3. http://www.iqiyi.com/w_19ru47x8k1.html
+4. http://www.iqiyi.com/w_19ru47xo61.html
+### 合集版本（带算法说明的详细版本不过不太清晰）
+
 http://www.iqiyi.com/w_19ru47vxvl.html
 
 # Aerobatic Flight of a quadrotor
@@ -23,8 +24,8 @@ Without using gain scheduling method, only one group of parameters can handle la
 
 ## Videos:
 https://www.youtube.com/watch?v=NZKBbnfau8s
-Or
-http://www.iqiyi.com/w_19ru47sxnx.html
-http://www.iqiyi.com/w_19ru47tr3h.html
-http://www.iqiyi.com/w_19ru47x8k1.html
-http://www.iqiyi.com/w_19ru47xo61.html
+### Or
+1. http://www.iqiyi.com/w_19ru47sxnx.html
+2. http://www.iqiyi.com/w_19ru47tr3h.html
+3. http://www.iqiyi.com/w_19ru47x8k1.html
+4. http://www.iqiyi.com/w_19ru47xo61.html
